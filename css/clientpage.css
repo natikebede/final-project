@@ -1,0 +1,57 @@
+/* client page css*/
+@keyframes move
+{
+    0%   {color:red; left:0px; top:0px;}
+  25%  { color:goldenrod; left:20px; top:0px;}
+  50%  {color:aquamarine; left:20px; top:20px;}
+  75%  {color:green; left:0px; top:20px;}
+  100% {color:#012970; left:0px; top:0px;}
+
+}
+
+#pro-text
+{ animation: move;
+    animation-duration: 4s;
+    animation-delay: 2s;
+    animation-iteration-count: 1;
+    
+
+}
+#log-AVS
+{
+    animation: move;
+    animation-duration: 4s;
+    animation-delay: 2s;
+    animation-iteration-count: 1;   
+    color:white; 
+}
+
+
+.social-links a {
+    font-size: 20px;
+    display: inline-block;
+    color: rgba(1, 41, 112, 0.5);
+    line-height: 0;
+    margin-right: 10px;
+    transition: 0.3s;}
+
+    .icons
+{
+    cursor: pointer;
+}
+.twitter-icons:hover
+{  color:rgb(8, 148, 230);
+    background-color: rgb(255, 255, 255);
+    
+}
+.facebook-icons:hover
+{ 
+  color:rgb(8, 148, 230);
+    background-color: rgb(255, 255, 255);
+    
+}
+.instagram-icons:hover
+{     color:rgba(230, 52, 8, 0.842);
+    background-color:  rgb(255, 255, 255);
+    
+}

@@ -1,0 +1,95 @@
+
+@keyframes move
+{
+    0%   {color:rgb(245, 82, 82); left:0px; top:0px;}
+  25%  { color:rgb(149, 121, 50); left:20px; top:0px;}
+  50%  {color:rgb(53, 163, 127); left:20px; top:20px;}
+  75%  {color:rgb(45, 189, 45); left:0px; top:20px;}
+  100% {color:#6594e6; left:0px; top:0px;}
+
+}
+
+#pro-text
+{ animation: move;
+    animation-duration: 4s;
+    animation-delay: 2s;
+    animation-iteration-count: 1;
+    
+
+}
+#log-AVS
+{
+    animation: move;
+    animation-duration: 4s;
+    animation-delay: 2s;
+    animation-iteration-count: 1;   
+    color:white; 
+}
+
+
+.social-links a {
+    font-size: 20px;
+    display: inline-block;
+    color: rgba(1, 41, 112, 0.5);
+    line-height: 0;
+    margin-right: 10px;
+    transition: 0.3s;}
+
+    .icons
+{
+    cursor: pointer;
+}
+.twitter-icons:hover
+{  color:rgb(8, 148, 230);
+    background-color: rgb(255, 255, 255);
+    
+}
+.facebook-icons:hover
+{ 
+  color:rgb(8, 148, 230);
+    background-color: rgb(255, 255, 255);
+    
+}
+.instagram-icons:hover
+{     color:rgba(230, 52, 8, 0.842);
+    background-color:  rgb(255, 255, 255);
+    
+}
+.buttons
+  {
+    
+    color:white;
+    transition:ease-out;
+    transition-delay:0.15s;
+    
+    
+  }
+  .buttons:hover
+  {
+    transform: translateX(15px);
+    color:#4154f1;
+    background-color: white;
+    transition:ease-out;
+    transition-delay:0.15s;
+    
+    
+  }
+  .valuate_buttons
+  {
+    
+    color:black;
+    transition:ease-out;
+    transition-delay:0.15s;
+    
+    
+  }
+  .valuate_buttons:hover
+  {
+    transform: translateX(15px);
+    color:#4154f1;
+    background-color: white;
+    transition:ease-out;
+    transition-delay:0.15s;
+    
+    
+  }

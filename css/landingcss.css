@@ -1,0 +1,85 @@
+.hero {
+    width: 100%;
+    height: 100vh;
+    background: url(back_images/hero-bg.png) top center no-repeat;
+    background-size: cover;
+    margin-top:20px;
+    z-index:1;
+  }
+  .buttons
+  {
+    
+    color:#012970;
+    transition:ease-out;
+    transition-delay:0.15s;
+    
+    
+  }
+  .buttons:hover
+  {
+    transform: translateX(15px);
+    color:white;
+    background-color: #4154f1;
+    transition:ease-out;
+    transition-delay:0.15s;
+    
+    
+  }
+  .btn-get-started {
+    margin-top: 30px;
+    list-style: none;
+    text-decoration: none;
+    line-height: 0;
+    padding: 15px 40px;
+    border-radius: 4px;
+    transition: 0.5s;
+    color: #fff;
+    font-weight: bolder;
+    background: #4154f1;
+    box-shadow: 0px 5px 30px rgba(65, 84, 241, 0.4);
+  }
+   .btn-get-started:hover  {
+    transform: translateX(5px);
+    text-decoration: none;
+    color:white;
+    background-color: #012970;
+    transition: ease-in-out;
+    
+  }
+.loginbutton
+{
+  color:white;
+  background-color: #4154f1;;
+}
+  
+.loginbutton:hover
+{
+  transform: translateX(15px);
+  color:white;
+  background-color:  #012970;
+  transition:ease-out;
+  transition-delay:0.15s;
+  
+  
+}
+  .buttons:hover
+  {
+    transform: translateX(15px);
+    color:white;
+    background-color: #4154f1;
+    transition:ease-out;
+    transition-delay:0.15s;
+    
+    
+  }
+  
+  .textcolor
+  {
+    color:#012970;
+    font-weight: bolder;
+}
+
+
+
+
+
