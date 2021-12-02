@@ -94,7 +94,7 @@ $client_id=$_SESSION['Client_ID'];
 $f_name=$_POST['firstname'];
 $l_name=$_POST['lastname'];
 
-$pwd=$_POST['password'];
+$pwd=md5($_POST['password']);
 $email=$_POST['email'];
 $city=$_POST['city'];
 $wereda=$_POST['wereda'];
@@ -363,7 +363,7 @@ $broker_id=$_SESSION['Broker_ID'];
 $f_name=$_POST['firstname'];
 $l_name=$_POST['lastname'];
 
-$pwd=$_POST['password'];
+$pwd=md5($_POST['password']);
 $email=$_POST['email'];
 $city=$_POST['city'];
 $wereda=$_POST['wereda'];
@@ -502,7 +502,7 @@ function update_AVC ()
 
   $AVC_ID=$_SESSION['AVC_ID'];
   $name=$_POST['name']; 
-  $pwd=$_POST['password'];
+  $pwd=md5($_POST['password']);
   $email=$_POST['email'];
   $conn=$GLOBALS['conn'];
   $profile=pic_upload("AVC");

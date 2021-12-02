@@ -49,7 +49,93 @@ if(isset($_POST['logout']))
   
 }
 
+$conn=$GLOBALS['conn'];
+    $sql = "SELECT `broker`.`First_name`, `broker`.`Last_name`,`broker`.`email`, `broker`.`city`, `broker`.`wereda`, `broker`.`Profile_pic`, `broker`.`create_date`, `account`.`Username`, `account`.`Password`,`score`.`Score_point`
+     FROM `broker` LEFT JOIN `account` ON `account`.`Broker_ID` = `broker`.`Broker_ID` 
+     LEFT JOIN `score` ON `score`.`Broker_ID` = `broker`.`Broker_ID` WHERE `broker`.`Broker_ID`='$broker_ID'";
+  $user_name=null;
+  $pwd=null;
+  $email=null;
+  $name=null;
+  $first_name=null;
+  $last_name=null;
+  $address=null;
+  $create_date=null;
+  $profile_pic=null;
+  $city=null;
+  $wereda=null;
+  $score=null;
+  $post_amount=null;
+  $phone=array();
 
+  $result= $conn->query($sql);
+  if($result!=false && $result->num_rows ==1)
+  {
+
+    while($row=$result->fetch_assoc())
+    {
+      $user_name=$row['Username'];
+      $pwd=$row['Password'];
+      $email=$row['email'];
+      $address=$row['city'].",". $row['wereda'];
+      $city=$row['city'];
+      $wereda= $row['wereda'];
+      $create_date=$row['create_date'];
+      $profile_pic=$row['Profile_pic'];
+      $name=$row['First_name']." ".$row['Last_name'];
+      $first_name=$row['First_name'];
+      $last_name=$row['Last_name'];
+      $score=$row['Score_point'];
+     
+
+    }
+    $sql="SELECT * FROM  broker_phonenumber where Broker_ID='$broker_ID'";
+    $result=$conn->query($sql);
+    if($result->num_rows >0)
+    {
+        $phonenumber=null; 
+        $count=0;
+        while( $row=$result->fetch_assoc() )  
+        {  
+            $phonenumber=$row['Phone_number'];
+            $phone[$count]=$phonenumber;
+            $count++;
+        }
+
+    }
+    else
+    {
+      echo'
+ 
+          ';
+    }
+    if($score >=5000)
+    {
+      $sql="UPDATE `broker` SET `account_veryfiy` = 'approved' WHERE Broker_ID='$broker_ID'";
+      
+      if($conn->query($sql)===true)
+      {
+         
+      }
+
+    }
+  }
+  else
+  {
+    echo'<div id= "toadd" class="show" >
+    <div class=" w3-animate-zoom">
+      <div class="container p-2" id="success" >
+          <div class="alert alert-danger alert-dismissible fade show">
+          <strong>!</strong> Error:'. $sql . '<br>' . $conn->error.' !!<br>
+          <strong>!</strong> Error: while reteriving account info !!
+              <P>
+              <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+          </div>
+      </div>
+    </div>
+  </div>';
+
+  }
 
 
 
@@ -66,7 +152,7 @@ if(isset($_POST['logout']))
         <link rel="stylesheet" href="css/bootstrap.min.css">
         
         <link rel="stylesheet" href="css/brokerpage.css">
-       
+        <link rel="stylesheet" href="css/chat_css.css">
         <link rel="stylesheet" href="fonts/css/all.css">
 
         
@@ -90,7 +176,18 @@ if(isset($_POST['logout']))
   color: #fff;
   line-height: 0;
 }
-
+.chat-box
+{
+   height: 500px;
+   overflow-y: scroll;
+   background-color: #f7f7f7;
+   padding:10px 30px 20px 30px;
+   box-shadow:inset 0 32px 32px -32px rgb(0 0 0 /5%), 
+}
+:is(.chat-box)::-webkit-scrollbar
+  {
+    width:0px;  
+  }
 .back-to-top:hover {
   background: #6776f4;
   color: #fff;
@@ -136,82 +233,7 @@ if(isset($_POST['logout']))
       
       
       </script>
-    <?php
-    $conn=$GLOBALS['conn'];
-    $sql = "SELECT `broker`.`First_name`, `broker`.`Last_name`,`broker`.`email`, `broker`.`city`, `broker`.`wereda`, `broker`.`Profile_pic`, `broker`.`create_date`, `account`.`Username`, `account`.`Password`
-     FROM `broker` LEFT JOIN `account` ON `account`.`Broker_ID` = `broker`.`Broker_ID`  WHERE `broker`.`Broker_ID`='$broker_ID'";
-  $user_name=null;
-  $pwd=null;
-  $email=null;
-  $name=null;
-  $first_name=null;
-  $last_name=null;
-  $address=null;
-  $create_date=null;
-  $profile_pic=null;
-  $city=null;
-  $wereda=null;
-  $post_amount=null;
-  $phone=array();
-
-  $result= $conn->query($sql);
-  if($result!=false && $result->num_rows ==1)
-  {
-
-    while($row=$result->fetch_assoc())
-    {
-      $user_name=$row['Username'];
-      $pwd=$row['Password'];
-      $email=$row['email'];
-      $address=$row['city'].",". $row['wereda'];
-      $city=$row['city'];
-      $wereda= $row['wereda'];
-      $create_date=$row['create_date'];
-      $profile_pic=$row['Profile_pic'];
-      $name=$row['First_name']." ".$row['Last_name'];
-      $first_name=$row['First_name'];
-      $last_name=$row['Last_name'];
-     
-
-    }
-    $sql="SELECT * FROM  broker_phonenumber where Broker_ID='$broker_ID'";
-    $result=$conn->query($sql);
-    if($result->num_rows >0)
-    {
-        $phonenumber=null; 
-        $count=0;
-        while( $row=$result->fetch_assoc() )  
-        {  
-            $phonenumber=$row['Phone_number'];
-            $phone[$count]=$phonenumber;
-            $count++;
-        }
-
-    }
-    else
-    {
-      echo'
  
-          ';
-    }
-  }
-  else
-  {
-    echo'<div id= "toadd" class="show" >
-    <div class=" w3-animate-zoom">
-      <div class="container p-2" id="success" >
-          <div class="alert alert-danger alert-dismissible fade show">
-          <strong>!</strong> Error:'. $sql . '<br>' . $conn->error.' !!<br>
-          <strong>!</strong> Error: while reteriving account info !!
-              <P>
-              <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
-          </div>
-      </div>
-    </div>
-  </div>';
-
-  }
-?>
         <!-- nav bar for the page-->
         <header>
             <nav class="navbar navbar-expand-lg  nav-light mb-3 bg-light">
@@ -235,9 +257,7 @@ if(isset($_POST['logout']))
                   <button type="button" class="btn buttons mx-3 font-weight-bolder   " id="valuations_button">Valuations<i class="mx-2 fas fa-upload"></i></button>
 
                   </li>
-                  <li class="nav-item">
-                    <button type="button" class="btn buttons mx-3 font-weight-bolder  " id="Messages_button" >Messages <i class=" mx-2 fa fa-envelope"></i></button>
-                  </li>
+                  
                  
                 
                 </ul>
@@ -396,7 +416,7 @@ if(isset($_POST['logout']))
 
                 <!--##################################### middel section ##################################################################################################### -->
                 
-                <div class="col-lg-7 rounded  p-2  mb-4  mx-1 " id="post_view">
+                <div class="col-lg-9 rounded  p-2  mb-4  mx-1 " id="post_view">
           
                  
                   
@@ -410,11 +430,11 @@ if(isset($_POST['logout']))
 
 
                  <!-- #################################### right side section #########################################################################################################-->
-
+                        <!--
                 <div class="col-lg-2 rounded shadow-lg p-4 mb-4  mx-3 bg-dark">
                  
                 </div>
-                <!--end of left side section-->
+               end of left side section-->
   
               </div>
              
@@ -524,7 +544,7 @@ if(isset($_POST['logout']))
          <div class="  mx-auto p-0 bg-success rounded float-left "style="width: 300px;height: 100px;box-sizing: border-box;">
 
           <div class="ml-2   p-0 w-100 h-100 bg-light  rounded-right shadow" >
-            <h5  class=" text-success w-100 p-2 text-center font-weight-bold" id="post_amount_count">0   
+            <h5  class=" text-success w-100 p-2 text-center font-weight-bold" id="post_amount_count"><?php echo $score?> 
                      
             </h5> 
             <h5  class=" textcolor w-100 p-2 text-center font-weight-bold" id="post_amount_count">Score 
@@ -749,6 +769,92 @@ if(isset($_POST['logout']))
 
 
 
+
+<!--##################################### Chat model ##################################################################################################### -->
+
+
+
+<div class="container  ">
+  <div class="modal fade rounded" id="chat_view">
+      <div class="modal-dialog  modal-xl modal-dialog-centered">
+        <div class="modal-content">
+       
+          <div class="modal-header bg-light p-0" id="chat_header">
+         
+            </div>
+          <div class="modal-body rounded p-2  ">
+            <div class="container shadow-lg rounded p-0" id="chat-modal">
+              <div class="row">
+             
+               <div class="col-lg-12 p-2  " style=" word-break: break-all;">
+                <div class="chat-box" id="chat-log-display">
+                  <div class="outgoing" >
+                      <div class="details w-100 ">
+                        <p class=" text-light bg-primary p-4" >
+                          hey there man hey there manhey there manhey there man there manhey there 
+                          man hey there manhey there manhey there man there man hey there man hey there manhey there manhey there man there 
+                        </p>
+                      </div>
+      
+                  </div>
+      
+                  <div class="outgoing" >
+                    <div class="details ">
+                      <p class=" text-light bg-primary p-4" >
+                        hey there man hey there manhey there manhey there man there manhey there 
+                       
+                      </p>
+                    </div>
+      
+                </div>
+                  <div class="incoming">
+                    <div class="details " >
+                      <p class="text-light bg-info p-4 "  >
+                        hey there man hey there manhey there manhey there man there manhey there 
+                        man hey there manhey there manhey there man there man hey there man hey there manhey there manhey there man there 
+                      </p>
+                    </div>
+      
+                </div>
+      
+                </div>
+      
+               </div>
+              </div>
+             
+      
+      
+            </div>
+          </div>
+          <div class="modal-footer" id="send_button">
+            <div class="col-sm-12  w-100">
+                  <form class="form-inline" action="/action_page.php">
+                    <div class="input-group w-100  ">
+                      <textarea class="form-control" rows="4" cols ="4 " id="usermsg" name="usermsg" required></textarea>
+                      
+                      <div class="input-group-append rounded">
+                        <input name="submitmsg" class=" btn btn-primary"type="submit" id="submitmsg" value="Send">
+                      </div>
+  
+                    </div>
+                      </form>
+
+
+
+                </div>
+         
+           </div>
+        </div>
+
+
+      </div>
+
+
+
+  </div>
+</div>
+
+<!--##################################### Chat end of model ##################################################################################################### -->
 
 
 

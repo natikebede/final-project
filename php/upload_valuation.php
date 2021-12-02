@@ -46,7 +46,7 @@
  
 </style>
   </head>
-  <body>
+  <body class="bg-dark">
 <?php
 session_start();
 include "connection.php";
@@ -66,7 +66,19 @@ $sql="INSERT INTO valuation( Valuation_discription, Valuation_Method, Valuation_
 ('$val_dis','$val_method','$val_price','$date','$val_post_ID','$Broker_ID')";
 if($conn->query($sql)===true)
 {
-    echo'
+  $sql ="SELECT * FROM score WHERE Broker_ID='$Broker_ID'";
+  $result=$conn->query($sql);
+  if($result->num_rows ==1)
+  {$score=null;
+    while( $row=$result->fetch_assoc())
+    {
+      $score=$row['Score_point'];
+    }
+    $score+=50;
+    $sql2="UPDATE score SET Score_point='$score' ";
+    if($conn->query($sql2)===true)
+    {
+      echo'
  
     <div id= "toadd" class="" >
     <div class="">
@@ -79,6 +91,42 @@ if($conn->query($sql)===true)
       </div>
     </div>
   </div>';
+    }
+    else
+    {
+      echo'
+ 
+            <div id= "toadd" class="" >
+            <div class="">
+              <div class="container" id="success" >
+                  <div class="alert alert-success alert-dismissible fade show">
+                      <strong>!</strong> there was '.$sql.' error '.$conn->error.'!!
+                      <P>
+                      <button type="button" onclick="go_to_home_broker ()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+                  </div>
+              </div>
+            </div>
+          </div>';
+    }
+  }
+  else
+  {
+    echo'
+ 
+            <div id= "toadd" class="" >
+            <div class="">
+              <div class="container" id="success" >
+                  <div class="alert alert-success alert-dismissible fade show">
+                      <strong>!</strong> there was '.$sql.' error '.$conn->error.'!!
+                      <P>
+                      <button type="button" onclick="go_to_home_broker ()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+                  </div>
+              </div>
+            </div>
+          </div>';
+
+  }
+    
 } 
 else
 {

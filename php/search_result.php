@@ -1,14 +1,37 @@
 <?php
 include "connection.php";
-if(isset($_POST['query']))
+if(isset($_POST['query']) &&isset($_POST['type']))
 {
-    $search=$_POST['query'];
-    $search= $search.'%';
-    $sql="SELECT `account`.`Account_ID`, `account`.`Role`, `avc`.`AVC_ID`, `broker`.`Broker_ID`, `client`.`Client_ID` 
-    FROM `account` LEFT JOIN `avc` ON `account`.`AVC_ID` = `avc`.`AVC_ID` LEFT JOIN `broker` ON `account`.`Broker_ID` = `broker`.`Broker_ID` 
+  $type=$_POST['type'];
+  $search=$_POST['query'];
+  $search= $search.'%';
+  $Sql=null;
+  if($type=="Broker")
+  {
+    $sql="SELECT `account`.`Account_ID`, `account`.`Role`, `avc`.`AVC_ID`,  `client`.`Client_ID` 
+    FROM `account` LEFT JOIN `avc` ON `account`.`AVC_ID` = `avc`.`AVC_ID`  
+    LEFT JOIN `client` ON `account`.`Client_ID` = `client`.`Client_ID`
+     WHERE `client`.`First_name` LIKE '$search' OR `client`.`Last_name` LIKE '$search' OR `avc`.`name` LIKE '$search'  ";
+  }
+  elseif($type=="AVC")
+  {
+    $sql="SELECT `account`.`Account_ID`, `account`.`Role`, `broker`.`Broker_ID`, `client`.`Client_ID` 
+    FROM `account`  LEFT JOIN `broker` ON `account`.`Broker_ID` = `broker`.`Broker_ID` 
     LEFT JOIN `client` ON `account`.`Client_ID` = `client`.`Client_ID`
      WHERE `client`.`First_name` LIKE '$search' OR `client`.`Last_name` LIKE '$search' OR 
+     `broker`.`First_name` LIKE '$search' OR `broker`.`Last_name` LIKE '$search'  ";
+  }
+  elseif($type=="Client")
+  {
+    $sql="SELECT `account`.`Account_ID`, `account`.`Role`, `avc`.`AVC_ID`, `broker`.`Broker_ID`
+    FROM `account` LEFT JOIN `avc` ON `account`.`AVC_ID` = `avc`.`AVC_ID` LEFT JOIN `broker` ON `account`.`Broker_ID` = `broker`.`Broker_ID` 
+     WHERE  
      `broker`.`First_name` LIKE '$search' OR `broker`.`Last_name` LIKE '$search' OR `avc`.`name` LIKE '$search'  ";
+
+  }
+  
+    
+   
     $result=$conn->query($sql);
    if( $result!=false && $result->num_rows>0)
     { while($row=$result->fetch_assoc())
@@ -47,7 +70,7 @@ if(isset($_POST['query']))
                           <button class="btn btn-info mx-1"  onclick="view_profile('.$row['Client_ID'].',\'Client\')">
                             view profile
                             </button>
-                           <button class="btn btn-primary mx-1" onclick="message('.$row['Client_ID'].',\'Client\')" >
+                           <button class="btn btn-primary mx-1" onclick="view_message('.$row['Client_ID'].',\'Client\')" >
                             Messages
                            </button>
                            
@@ -101,6 +124,11 @@ if(isset($_POST['query']))
                           echo' <h5 class="mx-2 py-3 text-secondary mb-2  ">
                          <span class=" text-secondary border border-secondary px- bg-secondary rounded-circle" style="font-size:10px;">hh</span> offline</h5>';
                         }
+                        if($row['account_veryfiy']=='approved')
+                        {
+                         echo' <h5 class="mx-2 py-3 text-secondary mb-2  ">
+                         <span class="text-primary mx-1  fas fa-user-check"></span> </h5>';
+                        }
                       
                         echo'</div>
                       <div class="row w-100">
@@ -108,7 +136,7 @@ if(isset($_POST['query']))
                           <button class="btn btn-info mx-1"  onclick="view_profile('.$row['Broker_ID'].',\'Broker\')">
                             view profile
                             </button>
-                           <button class="btn btn-primary mx-1" onclick="message('.$row['Broker_ID'].',\'Broker\')" >
+                           <button class="btn btn-primary mx-1" onclick="view_message('.$row['Broker_ID'].',\'Broker\')" >
                             Messages
                            </button>
                            
@@ -164,6 +192,13 @@ if(isset($_POST['query']))
                              <span class=" text-secondary border border-secondary px- bg-secondary rounded-circle" style="font-size:10px;">hh</span> offline</h5>';
                             }
 
+                            if($row['License_status']=='Approved')
+                            {
+                             echo' <h5 class="mx-2 py-3 text-secondary mb-2  ">
+                             <span class="text-primary mx-1  fas fa-user-check"></span> </h5>';
+                            }
+                           
+
                             echo'
                           </div>
                           <div class="row w-100">
@@ -171,7 +206,7 @@ if(isset($_POST['query']))
                               <button class="btn btn-info mx-1"   onclick="view_profile('.$row['AVC_ID'].',\'AVC\')">
                                 view profile
                                 </button>
-                               <button class="btn btn-primary mx-1" onclick="message('.$row['AVC_ID'].',\'AVC\')" >
+                               <button class="btn btn-primary mx-1" onclick="view_message('.$row['AVC_ID'].',\'AVC\')" >
                                 Messages
                                </button>
                                
@@ -204,13 +239,25 @@ if(isset($_POST['query']))
         }
 
     }
-
+    elseif($result!=false && $result->num_rows==0)
+    {
+        echo' 
+        <div class="container-fluid" id="success" >
+            <div class="alert w-100 alert-info alert-dismissible fade show">
+                <strong>!</strong> no results found!!
+                <P>
+                
+            </div>
+       
+            </div>';
+    
+    }
     else
 {
     echo' 
           <div class="container-fluid" id="success" >
               <div class="alert w-100 alert-info alert-dismissible fade show">
-                  <strong>!</strong> no result found !!
+                  <strong>!</strong> '.$conn->error.'!!
                   <P>
                   
               </div>
@@ -261,7 +308,7 @@ elseif(isset($_POST['pID'])&&isset($_POST['acctype']))
                         ';
                     }
                
-echo'
+        echo'
                 </div>
                 
                
@@ -320,7 +367,7 @@ echo'
                         ';
                     }
                
-echo'
+            echo'
                 </div>
                 
                

@@ -30,7 +30,7 @@ $(document).ready(function()
               $("#search-bar").val(search_text);
               $.ajax({
 
-                      url:'php/search_result.php',
+                      url:'php/search_result_admin.php',
                       method:'post',
                       data:{query:search_text},
                       success: function(response)
@@ -62,6 +62,7 @@ $(document).ready(function()
       $("#deprate_display").hide();
       $("#license_request_display").hide();
       $("#Accounts_display").hide();
+      $("#license_view_content").hide();
     
     });
 
@@ -75,6 +76,7 @@ $(document).ready(function()
         $("#deprate_display").hide();
         $("#license_request_display").hide();
         $("#Accounts_display").hide();
+        $("#license_view_content").hide();
     });
 
 
@@ -87,6 +89,7 @@ $(document).ready(function()
       $("#deprate_display").hide();
       $("#license_request_display").hide();
       $("#Accounts_display").hide();
+      $("#license_view_content").hide();
     
   
     });
@@ -101,6 +104,7 @@ $(document).ready(function()
           $("#edit_profile").hide();
           $("#license_request_display").hide();
           $("#Accounts_display").hide();
+          $("#license_view_content").hide();
     });
 
     //when the license button is clicked
@@ -112,6 +116,7 @@ $(document).ready(function()
         $('#register_Admin').hide();
         $("#edit_profile").hide();
         $("#Accounts_display").hide();
+        $("#license_view_content").hide();
     });
 
     //when the Account button is clicked
@@ -122,7 +127,8 @@ $(document).ready(function()
         $("#deprate_display").hide();
         $('#post_display').hide();
         $('#register_Admin').hide();
-      $("#edit_profile").hide();
+       $("#edit_profile").hide();
+       $("#license_view_content").hide();
     });
   
 });
@@ -136,7 +142,7 @@ var loadFile = function(event,num) //for loding the image to display
     URL.revokeObjectURL(output[num].src) // free memory
   }
 }
-var loadtable= setTimeout(loadpost_table,200);
+
 var loadtable= setInterval(loadpost_table,20000);
 
 //load valuation post table
@@ -424,3 +430,96 @@ function Approve_License(license_id,avc_id)
   
               });
     }
+
+    //for activating user account
+   function activate_user(id,type)
+   {
+
+    $.ajax(
+      {
+        url:"php/admin_manage_account.php",
+        method:"post",
+        data:{active_account_id:id,active_account_type:type},
+        success:function(response)
+        {
+          account_display (type);
+          
+        }
+
+      });
+
+   }
+
+
+   //for suspend user account
+   function suspend_user(id,type)
+   {
+    $.ajax(
+      {
+        url:"php/admin_manage_account.php",
+        method:"post",
+        data:{deactive_account_id:id,deactive_account_type:type},
+        success:function(response)
+        {
+          account_display (type);
+          
+        }
+
+      });
+
+
+
+   }
+
+
+   //for removing user account
+   function remove_user(id,type)
+   {
+    var value =confirm("are you sure ?");
+    if (value==true)
+    {
+    $.ajax(
+      {
+        url:"php/admin_manage_account.php",
+        method:"post",
+        data:{remove_account_id:id,remove_account_type:type},
+        success:function(response)
+        {
+          account_display (type);
+          
+        }
+
+      });
+    }
+    else
+    {
+
+    }
+   }
+   
+   //for viewing license
+   function view_license(License_id,AVC_ID)
+   {
+      $("#license_view_content").show();
+      $("#Accounts_display").hide();
+      $("#license_request_display").hide();
+      $("#deprate_display").hide();
+      $('#post_display').hide();
+      $('#register_Admin').hide();
+      $("#edit_profile").hide();
+    $.ajax(
+      {
+        url:"php/admin_license_view.php",
+        method:"post",
+        data:{view_license_id:License_id,view_avc_id:AVC_ID},
+        success:function(response)
+        {
+          $("#license_view_content").html(response);
+          
+        }
+
+      });
+
+
+
+   }

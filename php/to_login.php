@@ -51,7 +51,7 @@
 include "connection.php";
 $user_name=$_POST['username'];
 $conn=$GLOBALS['conn'];
-$pwd=$_POST['password'];
+$pwd=md5($_POST['password']);
 $sql="SELECT * FROM  account where Username='$user_name' and password ='$pwd'";
 $result= $conn->query($sql);
 if($result->num_rows ==1)
@@ -59,6 +59,7 @@ if($result->num_rows ==1)
     $username=null;
     $password=null;
     $role=null;
+    $Account_status=null;
     $AVC_ID=null;
     $admin_ID=null;
     $client_ID=null;
@@ -73,7 +74,7 @@ if($result->num_rows ==1)
         $broker_ID=$row['Broker_ID'];
         $AVC_ID=$row['AVC_ID'];
         $account_ID=$row['Account_ID'];
-        
+        $Account_status=$row['Account_status'];
     }
 
 
@@ -84,15 +85,8 @@ if($result->num_rows ==1)
         $_SESSION['Client_ID']=$client_ID;
         $_SESSION['Account_ID']=$account_ID;
         $_SESSION['Username']=$username;
-        $_SESSION['Password']=$password;
-        $sql="UPDATE client SET Account_status='active' WHERE Client_ID='$client_ID'";
-        if($conn->query($sql)===true)
-        {
-
-          echo'<script> window.location.href="../clientpage.php"; </script>';
-
-        }
-        else
+        $_SESSION['Password']=$password; 
+        if($Account_status=='Suspended')
         {
           echo'
  
@@ -100,7 +94,8 @@ if($result->num_rows ==1)
             <div class="w3-modal-content w3-animate-zoom">
               <div class="container" id="success" >
                   <div class="alert alert-danger alert-dismissible fade show">
-                      <strong>!</strong> error occurred while changing status !!
+                      <strong>!</strong> your Account has been suspended by the system Administator 
+                      for violating  guidlines wait  acouple of days until the issue is resolved !!
                       <P>
                       <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
                   </div>
@@ -108,10 +103,40 @@ if($result->num_rows ==1)
             </div>
           </div>
 
-    ';
-          
+            ';
 
         }
+        else
+        {
+          $sql="UPDATE client SET Account_status='active' WHERE Client_ID='$client_ID'";
+          if($conn->query($sql)===true)
+          {
+  
+            echo'<script> window.location.href="../clientpage.php"; </script>';
+  
+          }
+          else
+          {
+            echo'
+   
+              <div id= "toadd" class="w3-modal" >
+              <div class="w3-modal-content w3-animate-zoom">
+                <div class="container" id="success" >
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <strong>!</strong> error occurred while changing status !!
+                        <P>
+                        <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+                    </div>
+                </div>
+              </div>
+            </div>
+  
+          ';
+            
+  
+          }
+        }
+       
        
 
     }
@@ -124,14 +149,7 @@ if($result->num_rows ==1)
         $_SESSION['Account_ID']=$account_ID;
         $_SESSION['Username']=$username;
         $_SESSION['Password']=$password;
-        $sql="UPDATE broker SET Account_status='active' WHERE Broker_ID='$broker_ID'";
-        if($conn->query($sql)===true)
-        {
-
-          echo'<script> window.location.href="../brokerpage.php"; </script>';
-
-        }
-        else
+        if($Account_status=='Suspended')
         {
           echo'
  
@@ -139,7 +157,8 @@ if($result->num_rows ==1)
             <div class="w3-modal-content w3-animate-zoom">
               <div class="container" id="success" >
                   <div class="alert alert-danger alert-dismissible fade show">
-                      <strong>!</strong> error occurred while changing status !!
+                      <strong>!</strong> your Account has been suspended by the system Administator 
+                      for violating  guidlines wait  acouple of days until the issue is resolved !!
                       <P>
                       <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
                   </div>
@@ -147,48 +166,101 @@ if($result->num_rows ==1)
             </div>
           </div>
 
-    ';
-          
-
-        }
-
-
-    }
-// if the account is that of a Company
-    elseif ($role=='AVC')
-    {
-       session_start();
-        $_SESSION['AVC_ID']=$AVC_ID;
-        $_SESSION['Account_ID']=$account_ID;
-        $_SESSION['Username']=$username;
-        $_SESSION['Password']=$password;
-        $sql="UPDATE avc SET Account_status='active' WHERE AVC_ID ='$AVC_ID'";
-        if($conn->query($sql)===true)
-        {
-
-          echo'<script> window.location.href="../AVCpage.php"; </script>';
+            ';
 
         }
         else
         {
-          echo'
- 
-          <div id= "toadd" class="show" >
-          <div class=" w3-animate-zoom">
-            <div class="container p-2" id="success" >
-                <div class="alert alert-danger alert-dismissible fade show">
-                <strong>!</strong> Error:'. $sql .' <br> ' . $conn->error.' !!
-                    <P>
-                    <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
-                </div>
-            </div>
-          </div>
-        </div>
 
-    ';
-          
+              $sql="UPDATE broker SET Account_status='active' WHERE Broker_ID='$broker_ID'";
+            if($conn->query($sql)===true)
+            {
+
+              echo'<script> window.location.href="../brokerpage.php"; </script>';
+
+            }
+            else
+            {
+              echo'
+    
+                <div id= "toadd" class="w3-modal" >
+                <div class="w3-modal-content w3-animate-zoom">
+                  <div class="container" id="success" >
+                      <div class="alert alert-danger alert-dismissible fade show">
+                          <strong>!</strong> error occurred while changing status !!
+                          <P>
+                          <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+        ';
+              
+
+            }
+
 
         }
+    }
+// if the account is that of a Company
+    elseif ($role=='AVC')
+    {
+          session_start();
+            $_SESSION['AVC_ID']=$AVC_ID;
+            $_SESSION['Account_ID']=$account_ID;
+            $_SESSION['Username']=$username;
+            $_SESSION['Password']=$password;
+            if($Account_status=='Suspended')
+            {
+              echo'
+    
+                <div id= "toadd" class="w3-modal" >
+                <div class="w3-modal-content w3-animate-zoom">
+                  <div class="container" id="success" >
+                      <div class="alert alert-danger alert-dismissible fade show">
+                          <strong>!</strong> your Account has been suspended by the system Administator 
+                          for violating  guidlines wait  acouple of days until the issue is resolved !!
+                          <P>
+                          <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+        ';
+
+            }
+            else
+            {
+              $sql="UPDATE avc SET Account_status='active' WHERE AVC_ID ='$AVC_ID'";
+            if($conn->query($sql)===true)
+            {
+
+              echo'<script> window.location.href="../AVCpage.php"; </script>';
+
+            }
+            else
+            {
+              echo'
+    
+              <div id= "toadd" class="show" >
+              <div class=" w3-animate-zoom">
+                <div class="container p-2" id="success" >
+                    <div class="alert alert-danger alert-dismissible fade show">
+                    <strong>!</strong> Error:'. $sql .' <br> ' . $conn->error.' !!
+                        <P>
+                        <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+                    </div>
+                </div>
+              </div>
+            </div>
+
+        ';
+              
+
+            }
+            }
 
 
     }
@@ -201,34 +273,59 @@ if($result->num_rows ==1)
         $_SESSION['Account_ID']=$account_ID;
         $_SESSION['Username']=$username;
         $_SESSION['Password']=$password;
-        echo'<script> window.location.href="../Adminpage.php"; </script>';
-        $sql="UPDATE admin SET Account_status='active' WHERE Admin_ID ='$admin_ID'";
-        if($conn->query($sql)===true)
+        if($Account_status=='Suspended')
         {
+          echo'
+ 
+            <div id= "toadd" class="w3-modal" >
+            <div class="w3-modal-content w3-animate-zoom">
+              <div class="container" id="success" >
+                  <div class="alert alert-danger alert-dismissible fade show">
+                      <strong>!</strong> your Account has been suspended by the system Administator 
+                      for violating  guidlines wait  acouple of days until the issue is resolved !!
+                      <P>
+                      <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+                  </div>
+              </div>
+            </div>
+          </div>
 
-          echo'<script> window.location.href="../AVCpage.php"; </script>';
+               ';
 
         }
         else
         {
-          echo'
- 
-          <div id= "toadd" class="show" >
-          <div class=" w3-animate-zoom">
-            <div class="container p-2" id="success" >
-                <div class="alert alert-danger alert-dismissible fade show">
-                <strong>!</strong> Error:'. $sql .' <br> ' . $conn->error.' !!
-                    <P>
-                    <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
-                </div>
+         // echo'<script> window.location.href="../Adminpage.php"; </script>';
+          $sql="UPDATE admin SET Account_status='active' WHERE Admin_ID ='$admin_ID'";
+          if($conn->query($sql)===true)
+          {
+  
+            echo'<script> window.location.href="../Adminpage.php"; </script>';
+  
+          }
+          else
+          {
+            echo'
+   
+            <div id= "toadd" class="show" >
+            <div class=" w3-animate-zoom">
+              <div class="container p-2" id="success" >
+                  <div class="alert alert-danger alert-dismissible fade show">
+                  <strong>!</strong> Error:'. $sql .' <br> ' . $conn->error.' !!
+                      <P>
+                      <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+                  </div>
+              </div>
             </div>
           </div>
-        </div>
-
-    ';
-          
+  
+      ';
+            
+  
+          }
 
         }
+       
 
     }
 }

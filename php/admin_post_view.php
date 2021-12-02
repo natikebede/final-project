@@ -4,9 +4,8 @@ include "connection.php";
 if(isset($_POST['load_post_table']))
 {
     $sql="SELECT post.Post_discription, post.Upload_date, asset.Asset_name, asset.Asset_type, post.No_views, post.Post_status,
-    image_url.Img_url, post.Post_ID,post.Admin_ID
-   FROM post LEFT JOIN asset ON post.Asset_ID = asset.Asset_ID LEFT JOIN image_url
-    ON image_url.Post_ID = post.Post_ID LEFT JOIN client ON post.Client_ID = client.Client_ID ORDER BY post.Upload_date DESC";
+     post.Post_ID,post.Admin_ID,client.First_name,client.Last_name
+   FROM post LEFT JOIN asset ON post.Asset_ID = asset.Asset_ID  LEFT JOIN client ON post.Client_ID = client.Client_ID ORDER BY post.Upload_date DESC";
    $result=$conn->query($sql);
    if($result->num_rows >0)
    {
@@ -23,7 +22,8 @@ if(isset($_POST['load_post_table']))
            <th>Asset type</th>
            <th>Number views</th>
            <th>Post status</th>
-           <th>Images</th>
+           <th>client name</th>
+           
            <th>Admin ID</th>
            <th>action</th>
          </tr>
@@ -39,7 +39,9 @@ if(isset($_POST['load_post_table']))
            <td>'.$row['Asset_type'].'</td>
            <td>'.$row['No_views'].'</td>
            <td>'.$row['Post_status'].'</td>
-           <td>'.$row['Img_url'].'</td>
+           <td>'.$row['First_name'].' '.$row['Last_name'].'</td>
+          
+           
            <td>'.$row['Admin_ID'].'</td>
            ';
            

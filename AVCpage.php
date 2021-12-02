@@ -170,6 +170,8 @@ include "connection.php";
         <link rel="stylesheet" href="css/bootstrap.min.css">
         
         <link rel="stylesheet" href="css/avcpage.css">
+        <link rel="stylesheet" href="css/chat_css.css">
+
        
         <link rel="stylesheet" href="fonts/css/all.css">
 
@@ -232,6 +234,18 @@ include "connection.php";
     background-color:  rgb(255, 255, 255);
     
 }
+.chat-box
+{
+   height: 500px;
+   overflow-y: scroll;
+   background-color: #f7f7f7;
+   padding:10px 30px 20px 30px;
+   box-shadow:inset 0 32px 32px -32px rgb(0 0 0 /5%), 
+}
+:is(.chat-box)::-webkit-scrollbar
+  {
+    width:0px;  
+  }
         </style>
        
     </head>
@@ -270,10 +284,7 @@ include "connection.php";
   
                     </li>
 
-                  <li class="nav-item">
-                    <button type="button" class="btn buttons mx-3 font-weight-bolder  " id="Messages_button" >Messages <i class=" mx-2 fa fa-envelope"></i></button>
-                  </li>
-                 
+                  
                 
                 </ul>
                 <button class="btn d-lg-none buttons mx-3 font-weight-bolder  " type="button" data-toggle="collapse" data-target="#myprofile" aria-controls="myprofile" aria-expanded="false" aria-label="Toggle navigation">my profile</button>
@@ -440,7 +451,7 @@ include "connection.php";
 
                 <!--##################################### middel section ##################################################################################################### -->
                 
-                <div class="col-lg-7 rounded  p-2  mb-4  mx-1 " id="post_view" style=" background: linear-gradient(to top, #3aafa9 -50%, #ffffff 99%)">
+                <div class="col-lg-9 rounded  p-2  mb-4  mx-1 " id="post_view" style=" background: linear-gradient(to top, #3aafa9 -50%, #ffffff 99%)">
           
                  
                   
@@ -455,9 +466,9 @@ include "connection.php";
 
                  <!-- #################################### right side section #########################################################################################################-->
 
-                <div class="col-lg-2 rounded shadow-lg p-4 mb-4  mx-3 " style=" background: linear-gradient(to top, #3aafa9 -50%, #ffffff 99%)">
+              <!--  <div class="col-lg-2 rounded shadow-lg p-4 mb-4  mx-3 " style=" background: linear-gradient(to top, #3aafa9 -50%, #ffffff 99%)">
                  
-                </div>
+                </div>-->
                 <!--end of left side section-->
   
               </div>
@@ -885,6 +896,92 @@ include "connection.php";
 <!--##################################### license tab start ##################################################################################################### -->
 
 
+<!--##################################### Chat model ##################################################################################################### -->
+
+
+
+<div class="container  ">
+  <div class="modal fade rounded" id="chat_view">
+      <div class="modal-dialog  modal-xl modal-dialog-centered">
+        <div class="modal-content">
+       
+          <div class="modal-header bg-light p-0" id="chat_header">
+         
+            </div>
+          <div class="modal-body rounded p-2  ">
+            <div class="container shadow-lg rounded p-0" id="chat-modal">
+              <div class="row">
+             
+               <div class="col-lg-12 p-2  " style=" word-break: break-all;">
+                <div class="chat-box" id="chat-log-display">
+                  <div class="outgoing" >
+                      <div class="details w-100 ">
+                        <p class=" text-light bg-primary p-4" >
+                          hey there man hey there manhey there manhey there man there manhey there 
+                          man hey there manhey there manhey there man there man hey there man hey there manhey there manhey there man there 
+                        </p>
+                      </div>
+      
+                  </div>
+      
+                  <div class="outgoing" >
+                    <div class="details ">
+                      <p class=" text-light bg-primary p-4" >
+                        hey there man hey there manhey there manhey there man there manhey there 
+                       
+                      </p>
+                    </div>
+      
+                </div>
+                  <div class="incoming">
+                    <div class="details " >
+                      <p class="text-light bg-info p-4 "  >
+                        hey there man hey there manhey there manhey there man there manhey there 
+                        man hey there manhey there manhey there man there man hey there man hey there manhey there manhey there man there 
+                      </p>
+                    </div>
+      
+                </div>
+      
+                </div>
+      
+               </div>
+              </div>
+             
+      
+      
+            </div>
+          </div>
+          <div class="modal-footer" id="send_button">
+            <div class="col-sm-12  w-100">
+                  <form class="form-inline" action="/action_page.php">
+                    <div class="input-group w-100  ">
+                      <textarea class="form-control" rows="4" cols ="4 " id="usermsg" name="usermsg" required></textarea>
+                      
+                      <div class="input-group-append rounded">
+                        <input name="submitmsg" class=" btn btn-primary"type="submit" id="submitmsg" value="Send">
+                      </div>
+  
+                    </div>
+                      </form>
+
+
+
+                </div>
+         
+           </div>
+        </div>
+
+
+      </div>
+
+
+
+  </div>
+</div>
+
+
+<!--##################################### Chat end of model ##################################################################################################### -->
 
 
 

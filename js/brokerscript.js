@@ -51,11 +51,15 @@ $(document).ready(function()
         
           search_text= search_text[0].toUpperCase()+search_text.slice(1);
           $("#search-bar").val(search_text);
+          var Account_type= document.forms["serial"]["Account_type"].value;
         $.ajax({
 
                 url:'php/search_result.php',
                 method:'post',
-                data:{query:search_text},
+                data:{
+                  query:search_text,
+                  type:Account_type
+                },
                 success: function(response)
                 {
                     $('#search-dropdown').html(response);
@@ -79,7 +83,7 @@ $(document).ready(function()
           $("#home_content").hide();
           $("#edit_profile").hide();
           $("#valuation_content").show();
-        
+          loadpost_table();
         loadpost();
       });
 
@@ -130,7 +134,7 @@ var loadFile = function(event,num) //for loding the image to display
       URL.revokeObjectURL(output[num].src) // free memory
     }
 }
-var loadtable= setTimeout(loadpost_table,200);
+var loadtable= setInterval(loadpost_table,20000);
 //load valuation post table
 function loadpost_table()
 {
@@ -232,7 +236,7 @@ function deletenumber (count)
       phone_upload ();
 }
 
-var loadview= setTimeout(loadpost,200);
+var loadview= setInterval(loadpost,20000);
 
 //to open the valuation form 
 
@@ -300,6 +304,132 @@ function view_profile(id,type)
 
 
 }
+
+//open modal for chat 
+function view_message(id,type)
+{
+ 
+    $.ajax({
+
+      url:'php/chat_loadder.php',
+      method:'post',
+      data:{pID:id,acctype:type},
+      success: function(response)
+      {
+          $("#chat_header").html(response);
+          send_button_update(id,type);
+      }
+    });
+
+
+}
+
+
+
+
+//send button load
+function send_button_update(id,type)
+{
+  if(type=="AVC")
+  {
+    var user_Id= document.forms["serial"]["ID"].value;
+  var account_type=document.forms["serial"]["Account_type"].value+"-"+type;
+  
+   
+
+  }
+  else{
+  var user_Id= document.forms["serial"]["ID"].value;
+  var account_type=type+"-"+document.forms["serial"]["Account_type"].value;
+  
+  
+  }
+  $.ajax({
+
+    url:'php/chat_loadder.php',
+    method:'post',
+    data:{
+      reciverID:user_Id,
+      acctype:account_type,
+      user_id:id,
+      reciver_type:type
+      
+      
+    },
+    success: function(response)
+    {
+        $("#send_button").html(response);
+        $("#chat_view").modal();
+        read_Chat_log();
+    }
+  });
+
+}
+
+//function for writting to the chat log
+
+function write_message()
+{
+  
+  
+  type=$("#reciver_type").val();
+    var text_message= $("#usermsg").val();
+    var filename= $("#usermsgs").val();
+    //alert(filename);
+    
+    $.ajax({
+
+      url:'php/chat_broker.php',
+      method:'post',
+      data:{
+        text_message_send:text_message,
+        file_name:filename,
+        Account_type:type
+        
+        
+      },
+      success: function(response)
+      {
+        $("#usermsg").val("");
+          
+      }
+    });
+  
+  
+
+}
+
+load_text=setInterval(read_Chat_log,200);
+//for reading chat log into the chat log
+function read_Chat_log()
+{
+  var oldscrollHeight = $("#chat-log-display")[0].scrollHeight - 20; //Scroll height before the request
+    
+  var filename= $("#usermsgs").val();
+  //alert(filename);
+  
+  $.ajax({
+
+    url:'php/chat_loadder.php',
+    method:'post',
+    data:{
+      
+      read_file_name:filename
+      
+      
+    },
+    success: function(response)
+    {
+      
+       $("#chat-log-display").html(response);
+       var newscrollHeight = $("#chat-log-display")[0].scrollHeight - 20; //Scroll height after the request
+            if(newscrollHeight > oldscrollHeight){
+                $("#chat-log-display").animate({ scrollTop: newscrollHeight }, 'normal'); //Autoscroll to bottom of div
+            }   
+    }
+  });
+}
+
 
 
 

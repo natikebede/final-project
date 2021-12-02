@@ -57,9 +57,52 @@ if(isset($_POST['upload_License']))
     
     if (isset($_SESSION['AVC_ID']))
     {
-        $AVC_ID= $_SESSION['AVC_ID'];
 
-        $php_FileUpload_Errors=array(
+        $AVC_ID= $_SESSION['AVC_ID'];
+        $sql="SELECT *FROM license WHERE AVC_ID='$AVC_ID' ";
+        $result=$conn->query($sql);
+        if($result->num_rows>1|| $result->num_rows==1)
+        {
+          $license=null;;
+          while( $row=$result->fetch_assoc())
+          {
+            $license=$row['License_status'];
+
+          }
+          if($license='Approved')
+          {
+            echo'<div id= "toadd" class="show" >
+            <div class=" w3-animate-zoom">
+              <div class="container p-2" id="success" >
+                  <div class="alert alert-info alert-dismissible fade show">
+                  <strong>!</strong> your account has aready been Approved  and Verifyied  !!
+                      <P>
+                      <button type="button" onclick="go_to_home_AVC ()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+                  </div>
+              </div>
+            </div>
+          </div>';
+
+          }
+          else
+          {
+                echo'<div id= "toadd" class="show" >
+                <div class=" w3-animate-zoom">
+                  <div class="container p-2" id="success" >
+                      <div class="alert alert-info alert-dismissible fade show">
+                      <strong>!</strong> you have areadly  submitted a license you can  remove the one you sent and send a new one !!
+                          <P>
+                          <button type="button" onclick="go_to_home_AVC ()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+                      </div>
+                  </div>
+                </div>
+              </div>';
+          }
+        }
+        else
+        {
+
+          $php_FileUpload_Errors=array(
             0=>'There is no error, the file  uploaded with success',
             1=>'the  uploaded file exceeds the upload size limit in the php.ini directive',
             2=>'the  uploaded file exceeds the upload Max_FILE_ SIZE directive that was specified in the HTML form',
@@ -73,98 +116,102 @@ if(isset($_POST['upload_License']))
         );
 
         if(isset($_FILES["license_pic"]))
-{   $file_location=array();
-    
-   $newfiles= re_Array_Files($_FILES["license_pic"]);
-    //pre_r( $newfiles);
-    for($i=0;$i<count($newfiles);$i++)
-    {
-      $target_file="uploads/License_pic/";
-        if($newfiles[$i]['error'])
-        {
-            echo'<div id= "toadd" class="" >
-            <div class=" w3-animate-zoom">
-              <div class="container" id="success" >
-                  <div class="alert alert-danger alert-dismissible fade show">
-                      <strong>!</strong> '.$newfiles[$i]["name"].'- '.$php_FileUpload_Errors[$newfiles[$i]["error"]].' !!
-                      <P>
-                      <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
-                  </div>
-              </div>
-            </div>
-          </div>';
-
-        }
-        else
-        {
-            $extesion=array('jpg','png','gif','PNG','jpeg','JPG','GIF','JPEGS','pdf','PDF');
-            $file_ext=explode('.',$newfiles[$i]['name']);
-            $file_ext=end($file_ext);
-            if(!in_array($file_ext,$extesion))
+        {  
+            $file_location=array();
+      
+            $newfiles= re_Array_Files($_FILES["license_pic"]);
+            //pre_r( $newfiles);
+            for($i=0;$i<count($newfiles);$i++)
             {
-                echo'<div id= "toadd" class="show" >
-            <div class=" w3-animate-zoom">
-              <div class="container p-2" id="success" >
-                  <div class="alert alert-danger alert-dismissible fade show">
-                      <strong>!</strong> '.$newfiles[$i]["name"].'- invalid extenstion !!
-                      <P>
-                      <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
-                  </div>
-              </div>
-            </div>
-          </div>';
-
-            }
-            else
-            {   $target_file= $target_file.basename($newfiles[$i]["name"]);
-                if(file_exists($target_file))
-                {   
-                  $file_location[$i]="php/uploads/license_pic/".$newfiles[$i]["name"];
-                    echo'<div id= "toadd" class="show" >
+              $target_file="uploads/License_pic/";
+                if($newfiles[$i]['error'])
+                {
+                    echo'<div id= "toadd" class="" >
                     <div class=" w3-animate-zoom">
-                      <div class="container p-2" id="success" >
-                          <div class="alert alert-success alert-dismissible fade show">
-                          <strong>!</strong> '.$newfiles[$i]["name"].'- file aready exist\'s !!
+                      <div class="container" id="success" >
+                          <div class="alert alert-danger alert-dismissible fade show">
+                              <strong>!</strong> '.$newfiles[$i]["name"].'- '.$php_FileUpload_Errors[$newfiles[$i]["error"]].' !!
                               <P>
                               <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
                           </div>
                       </div>
                     </div>
                   </div>';
-                  continue;
 
                 }
                 else
                 {
-                  
-                    move_uploaded_file($newfiles[$i]['tmp_name'], $target_file);
-                    $file_location[$i]="php/uploads/License_pic/".$newfiles[$i]["name"];
-                    echo'<div id= "toadd" class="show" >
+                    $extesion=array('jpg','png','gif','PNG','jpeg','JPG','GIF','JPEGS','pdf','PDF');
+                    $file_ext=explode('.',$newfiles[$i]['name']);
+                    $file_ext=end($file_ext);
+                    if(!in_array($file_ext,$extesion))
+                    {
+                        echo'<div id= "toadd" class="show" >
                     <div class=" w3-animate-zoom">
                       <div class="container p-2" id="success" >
-                          <div class="alert alert-success alert-dismissible fade show">
-                          <strong>!</strong> '.$newfiles[$i]["name"].'- '.$php_FileUpload_Errors[$newfiles[$i]["error"]].' !!
+                          <div class="alert alert-danger alert-dismissible fade show">
+                              <strong>!</strong> '.$newfiles[$i]["name"].'- invalid extenstion !!
                               <P>
                               <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
                           </div>
                       </div>
                     </div>
                   </div>';
-               
+
+                    }
+                    else
+                    {   $target_file= $target_file.basename($newfiles[$i]["name"]);
+                        if(file_exists($target_file))
+                        {   
+                          $file_location[$i]="php/uploads/license_pic/".$newfiles[$i]["name"];
+                            echo'<div id= "toadd" class="show" >
+                            <div class=" w3-animate-zoom">
+                              <div class="container p-2" id="success" >
+                                  <div class="alert alert-success alert-dismissible fade show">
+                                  <strong>!</strong> '.$newfiles[$i]["name"].'- file aready exist\'s !!
+                                      <P>
+                                      <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+                                  </div>
+                              </div>
+                            </div>
+                          </div>';
+                          continue;
+
+                        }
+                        else
+                        {
+                          
+                            move_uploaded_file($newfiles[$i]['tmp_name'], $target_file);
+                            $file_location[$i]="php/uploads/License_pic/".$newfiles[$i]["name"];
+                            echo'<div id= "toadd" class="show" >
+                            <div class=" w3-animate-zoom">
+                              <div class="container p-2" id="success" >
+                                  <div class="alert alert-success alert-dismissible fade show">
+                                  <strong>!</strong> '.$newfiles[$i]["name"].'- '.$php_FileUpload_Errors[$newfiles[$i]["error"]].' !!
+                                      <P>
+                                      <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+                                  </div>
+                              </div>
+                            </div>
+                          </div>';
+                      
+                        }
+                      
+                        
+
+                    }
                 }
-               
-                
-
             }
-        }
-    }
-    
-    $last_id=  upload_to_database(); //to upload data to database 
-    upload_image($last_id,$file_location);//to upload image to databa
-//pre_r( $file_location);
-}
+      
+            $last_id=  upload_to_database(); //to upload data to database 
+            upload_image($last_id,$file_location);//to upload image to databa
+            //pre_r( $file_location);
+           }
 
-    }
+       }
+
+        }
+       
 
 
 }
@@ -194,35 +241,36 @@ function re_Array_Files($file_post)
 
 
 function upload_to_database()
-{ $AVC_ID=$_SESSION['AVC_ID'];
-  $conn=$GLOBALS['conn'];
-  $discription=$_POST["discription"];
-  $date=date("Y-m-d h:i:s");
-  $sql="INSERT INTO license( License_description, AVC_ID, Upload_date) VALUES ('$discription','$AVC_ID','$date')";
-  if($conn->query($sql)===true)
-  {
-    $last_id= $conn->insert_id;
-   
-    return $last_id;
-   
-  
+ { 
+        $AVC_ID=$_SESSION['AVC_ID'];
+        $conn=$GLOBALS['conn'];
+        $discription=$_POST["discription"];
+        $date=date("Y-m-d h:i:s");
+        $sql="INSERT INTO license( License_description, AVC_ID, Upload_date) VALUES ('$discription','$AVC_ID','$date')";
+        if($conn->query($sql)===true)
+        {
+          $last_id= $conn->insert_id;
+        
+          return $last_id;
+        
+        
 
-  }
+        } 
 
-  else
-  {
-    echo'<div id= "toadd" class="show" >
-    <div class=" w3-animate-zoom">
-      <div class="container p-2" id="success" >
-          <div class="alert alert-danger alert-dismissible fade show">
-          <strong>!</strong> Error:'. $sql . '<br>' . $conn->error.' !!
-              <P>
-              <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+      else
+      {
+        echo'<div id= "toadd" class="show" >
+        <div class=" w3-animate-zoom">
+          <div class="container p-2" id="success" >
+              <div class="alert alert-danger alert-dismissible fade show">
+              <strong>!</strong> Error:'. $sql . '<br>' . $conn->error.' !!
+                  <P>
+                  <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+              </div>
           </div>
-      </div>
-    </div>
-  </div>';
-  }
+        </div>
+      </div>';
+      }
 
 
   
@@ -233,35 +281,35 @@ function upload_to_database()
 
 function upload_image($last_id,$pics)
 {
-  $conn=$GLOBALS['conn'];
-  for($i=0;$i<count($pics);$i++)
-  {
-    $sql="INSERT INTO license_image_url( License_ID, Img_url) VALUES  ('$last_id','$pics[$i]')";
-    if($conn->query($sql)===true)
+    $conn=$GLOBALS['conn'];
+    for($i=0;$i<count($pics);$i++)
     {
+      $sql="INSERT INTO license_image_url( License_ID, Img_url) VALUES  ('$last_id','$pics[$i]')";
+      if($conn->query($sql)===true)
+      {
 
-     
+      
 
-    }
-    else
-    {
-      echo'<div id= "toadd" class="show" >
-      <div class=" w3-animate-zoom">
-        <div class="container p-2" id="success" >
-            <div class="alert alert-danger alert-dismissible fade show">
-            <strong>!</strong> Error:'. $sql .' <br> ' . $conn->error.' !!
-                <P>
-                <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
-            </div>
+      }
+      else
+      {
+        echo'<div id= "toadd" class="show" >
+        <div class=" w3-animate-zoom">
+          <div class="container p-2" id="success" >
+              <div class="alert alert-danger alert-dismissible fade show">
+              <strong>!</strong> Error:'. $sql .' <br> ' . $conn->error.' !!
+                  <P>
+                  <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+              </div>
+          </div>
         </div>
-      </div>
-    </div>';
-    return;
+      </div>';
+      return;
 
     
-    }
+     }
 
-  }
+    }
   echo'<div id= "toadd" class="show" >
   <div class=" w3-animate-zoom">
     <div class="container p-2" id="success" >

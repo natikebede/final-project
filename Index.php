@@ -59,7 +59,7 @@
               <div class="collapse navbar-collapse bg-light rounded justify-content-end" id="navbarTogglerDemo02">
                 <ul class="navbar-nav  ">
                   <li class="nav-item"> 
-                   <a class="nav-link buttons rounded font-weight-bolder mx-4 " href="#services">About</a>
+                   <a class="nav-link buttons rounded font-weight-bolder mx-4 " href="#about">About</a>
 
                   </li>
                  
@@ -106,8 +106,8 @@
                   </div>
                 
                 <div class="custom-control">
-                  <input type="checkbox" class="rounded" name="Remember_me" value="remember">
-                  <label class="label" for="switch1">Remember me</label>
+                 <a class=" font-weight-bolder" data-target="#forgot_password" data-toggle="modal">forgot password ?</a>
+                  
                 </div>
 
                 <div class ="row">
@@ -430,10 +430,56 @@
 
 <!--end of regstiration-->
 
+<!--forgot password displaymodal-->
+<div class ="modal login_page fade rounded mt-5  " id="forgot_password">
+  <div class="modal-dialog   modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      
+      <div class="modal-body rounded bg-light">
+        <div class=" container  mxy-2 fade show   p-4 mb-4 bg-light rounded">
+          <button type="button bg-dark" class="close" data-dismiss="modal">&times;</button>
+          <h3 class=" display-3 font-weight-bolder  primary text-center w-100 logo "style="color:#012970;"> forgot password </h3>
+          <form name="reset_password"  class =" py-3 " method ="POST" action="php/reset_password.php" enctype="multipart/form-data" >
+            <div class="input-group mx-auto  my-5">
+              <label for="city" class="font-weight-bolder">Enter the email  you registered with:</label>
+              <input type="email" class=" mx-auto form-control w-100 " onblur='validation_Cemail("reset_password",3)'  placeholder="Enter email" id="coemail" name="email" required>
+              <span id="coemail_location"class="email_location btn bg-danger fa fa-warning py text-white my-2 font-weight-bolder" style="display :none;"></span>
+          
+            </div>
+            <div class="row p-3">
+              <p> <label class="font-weight-bolder">Your Type:</label></p>
+              <select name="account_type" class="custom-select w-100">
+                <option selected style=" display:none;"> select type</option>
+                <option value="Client">Client</option>
+                <option value="Broker">Broker</option>
+                <option value="AVC">AVC</option>
+                <option value="Admin">Admin</option>
+                
+              </select>
+              
+             </div>
+                    
+          <div class ="row">
+              <input type ="reset" value ="reset" style="width: 100px;" width="100px"name= "rest" class="mx-auto btn btn-primary mx-0 my-4">
+              <input type ="submit" name="submit_email" value=" Send confirmation"   class="singups mx-auto btn btn-success mx-0 my-4">
+          </div>
+        </form>
+      </div>
+
+      </div>
+        </div>
+
+    
+    
+  </div>
+ 
+
+</div>
+
+<!-- end forgot password displaymodal-->
 
 
-
-
+<!--middel section-->
     <div class ="container-fluid hero align-items-center py-5 ">
         <div class="row px-5  justify-content-center  ">
             <div class="col-lg-6   py-4">
@@ -458,30 +504,79 @@
     </div>
 
     <div class="container-fluid my-3 p-5">
-      <div class="row ">
-        <h6 class=" display-4 textcolor w-100 text-center font-weight-bolder ">services AVS will provide to you  </h6>
+      <div class="row my-4">
+        <div class="col-lg-12">
+          <h6 class=" display-4 textcolor w-100 text-center font-weight-bolder "id="services">services AVS will provide to you  </h6>
+        </div>
+       
       </div>
-      <div class="row">
+      <div class="row p-3 mx-3 my-2">
         
-        <div class="col-lg-4">
-          <div card>
-
-
+        <div class=" card-deck mx-auto p-3">
+          <div class="card bg-white shadow-lg " style="width:400px">
+            <a class="card-img-top mx-auto w-100 p-4"><span class="  text-center w-100 fas fa-sticky-note"style="font-size:45px"></span> </a>
+            <div class="card-body">
+              <h4 class="card-title display-4 text-center textcolor font-weight-bolder"> Post Assets</h4>
+              <p class="card-text p-2 font-weight-bolder textcolor">
+                user with client accounts can upload their information about their assets to 
+                be viewed and valuated by Brokers and Asset valuating compnays.
+              </p>
+             
+            </div>
           </div>
 
-        </div>
 
-        <div class="col-lg-4">
+         
+          <div class="card bg-white shadow-lg" style="width:400px">
+            <a class="card-img-top mx-auto w-100 p-4"><span class="  text-center w-100 fas fa-chalkboard-teacher"style="font-size:45px"></span> </a>
+            <div class="card-body">
+              <h4 class="card-title display-4 text-center textcolor font-weight-bolder"> Make Valuations</h4>
+              <p class="card-text p-2 font-weight-bolder textcolor">
+              Using AVS Brokers can register to view  and make valuations of assets posted by clients this also
+              could includes Asset valuating companies 
+              </p>
+             
+            </div>
+          </div>
 
-        </div>
 
-        <div class="col-lg-4">
+      
+          <div class="card bg-white shadow-lg " style="width:400px">
+            <a class="card-img-top mx-auto w-100 p-4"><span class="  text-center w-100 fab fa-rocketchat"style="font-size:45px"></span> </a>
+            <div class="card-body">
+              <h4 class="card-title display-4 text-center textcolor font-weight-bolder"> Message</h4>
+              <p class="card-text font-weight-bolder textcolor">
+               users can communicate with each other through messages 
+              </p>
+             
+            </div>
+          </div>
+
 
         </div>
       </div>
 
     </div>
 
+
+    <div class="container-fluid my-3 p-5">
+      <div class="row my-4">
+       
+       
+      </div>
+
+      <div class="row mx-4 p-5">
+        <div class="col-lg-12 shadow-lg">
+          <h6 class=" display-4 textcolor w-100 text-center font-weight-bolder "id="about">About us </h6>
+          <p class="textcolor">
+
+          </p>
+        </div>
+       
+      </div>
+    
+
+    </div>
 
 </body>
 </html>

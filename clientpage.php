@@ -50,10 +50,84 @@ if(isset($_POST['logout']))
 }
 
 
+           $conn=$GLOBALS['conn'];
+           $sql = "SELECT `client`.`First_name`, `client`.`Last_name`, `client`.`post_amount`,`client`.`email`, `client`.`city`, `client`.`wereda`, `client`.`profile_pic`, `client`.`create_date`, `account`.`Username`, `account`.`Password`
+           FROM `client` LEFT JOIN `account` ON `account`.`Client_ID` = `client`.`Client_ID`  WHERE `client`.`Client_ID`='$client_ID'";
+            $user_name=null;
+            $pwd=null;
+            $email=null;
+            $name=null;
+            $first_name=null;
+            $last_name=null;
+            $address=null;
+            $create_date=null;
+            $profile_pic=null;
+            $city=null;
+            $wereda=null;
+            $post_amount=null;
+            $phone=array();
 
+            $result= $conn->query($sql);
+            if($result!=false && $result->num_rows ==1)
+            {
 
+              while($row=$result->fetch_assoc())
+              {
+                $user_name=$row['Username'];
+                $pwd=$row['Password'];
+                $email=$row['email'];
+                $address=$row['city'].",". $row['wereda'];
+                $city=$row['city'];
+                $wereda= $row['wereda'];
+                $create_date=$row['create_date'];
+                $profile_pic=$row['profile_pic'];
+                $name=$row['First_name']." ".$row['Last_name'];
+                $first_name=$row['First_name'];
+                $last_name=$row['Last_name'];
+                $post_amount=$row['post_amount'];
 
+              }
+              $sql="SELECT * FROM  client_phonenumber where Client_ID='$client_ID'";
+              $result=$conn->query($sql);
+              if($result->num_rows >0)
+              {
+                  $phonenumber=null; 
+                  $count=0;
+                  while( $row=$result->fetch_assoc() )  
+                  {  
+                      $phonenumber=$row['Phone_number'];
+                      $phone[$count]=$phonenumber;
+                      $count++;
+                  }
+
+              }
+              else
+              {
+                echo'
+          
+                    ';
+              }
+            }
+            else
+            {
+              echo'<div id= "toadd" class="show" >
+              <div class=" w3-animate-zoom">
+                <div class="container p-2" id="success" >
+                    <div class="alert alert-danger alert-dismissible fade show">
+                    <strong>!</strong> Error: while reteriving account info !!
+                        <P>
+                        <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+                    </div>
+                </div>
+              </div>
+            </div>';
+
+            }
 ?>
+
+
+
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -66,6 +140,7 @@ if(isset($_POST['logout']))
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/landingcss.css">
         <link rel="stylesheet" href="css/clientpage.css">
+        <link rel="stylesheet" href="css/chat_css.css">
        
         <link rel="stylesheet" href="fonts/css/all.css">
 
@@ -128,6 +203,58 @@ if(isset($_POST['logout']))
     background-color:  rgb(255, 255, 255);
     
 }
+/*chat arew css code*/
+.chat-box
+{
+   height: 500px;
+   background-color: #f7f7f7;
+   overflow-y: scroll;
+   padding:10px 30px 20px 30px;
+   box-shadow:inset 0 32px 32px -32px rgb(0 0 0 /5%), 
+}
+.chat-box .chat
+{
+    margin:15px 0;
+}
+.chat-box .outgoing
+{
+  
+display: flex; 
+}
+.chat-box .incoming
+{
+  display:flex-end;
+  align-items:center;
+
+}
+
+.outgoing .details p{
+  
+padding: 2px;
+border-radius :18px 18px 0p 18px;
+}
+
+.outgoing .details {
+  margin-left:auto;
+  max-width:calc(100%-130px);
+  
+}
+
+.chat-box .chat p
+{
+    padding: 8px 16px;
+}
+.incoming .details p{
+  
+    padding: 2px;
+    border-radius :18px 18px 0p 18px;
+    }
+    
+.incoming .details {
+      margin-right:auto;
+      max-width:calc(100%-130px);
+      
+    }
         </style>
        
     </head>
@@ -136,81 +263,7 @@ if(isset($_POST['logout']))
       
       
       </script>
-    <?php
-    $conn=$GLOBALS['conn'];
-    $sql = "SELECT `client`.`First_name`, `client`.`Last_name`, `client`.`post_amount`,`client`.`email`, `client`.`city`, `client`.`wereda`, `client`.`profile_pic`, `client`.`create_date`, `account`.`Username`, `account`.`Password`
-     FROM `client` LEFT JOIN `account` ON `account`.`Client_ID` = `client`.`Client_ID`  WHERE `client`.`Client_ID`='$client_ID'";
-  $user_name=null;
-  $pwd=null;
-  $email=null;
-  $name=null;
-  $first_name=null;
-  $last_name=null;
-  $address=null;
-  $create_date=null;
-  $profile_pic=null;
-  $city=null;
-  $wereda=null;
-  $post_amount=null;
-  $phone=array();
-
-  $result= $conn->query($sql);
-  if($result!=false && $result->num_rows ==1)
-  {
-
-    while($row=$result->fetch_assoc())
-    {
-      $user_name=$row['Username'];
-      $pwd=$row['Password'];
-      $email=$row['email'];
-      $address=$row['city'].",". $row['wereda'];
-      $city=$row['city'];
-      $wereda= $row['wereda'];
-      $create_date=$row['create_date'];
-      $profile_pic=$row['profile_pic'];
-      $name=$row['First_name']." ".$row['Last_name'];
-      $first_name=$row['First_name'];
-      $last_name=$row['Last_name'];
-      $post_amount=$row['post_amount'];
-
-    }
-    $sql="SELECT * FROM  client_phonenumber where Client_ID='$client_ID'";
-    $result=$conn->query($sql);
-    if($result->num_rows >0)
-    {
-        $phonenumber=null; 
-        $count=0;
-        while( $row=$result->fetch_assoc() )  
-        {  
-            $phonenumber=$row['Phone_number'];
-            $phone[$count]=$phonenumber;
-            $count++;
-        }
-
-    }
-    else
-    {
-      echo'
- 
-          ';
-    }
-  }
-  else
-  {
-    echo'<div id= "toadd" class="show" >
-    <div class=" w3-animate-zoom">
-      <div class="container p-2" id="success" >
-          <div class="alert alert-danger alert-dismissible fade show">
-          <strong>!</strong> Error: while reteriving account info !!
-              <P>
-              <button type="button" onclick="got_to_back()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
-          </div>
-      </div>
-    </div>
-  </div>';
-
-  }
-?>
+    
         <!-- nav bar for the page-->
         <header>
             <nav class="navbar navbar-expand-lg  nav-dark  mb-3 bg-dark">
@@ -233,9 +286,6 @@ if(isset($_POST['logout']))
                   <li class="nav-item">
                   <button type="button" class="btn buttons mx-3 font-weight-bolder text-light " id="uploads_button">uploads<i class="mx-2 fas fa-upload"></i></button>
 
-                  </li>
-                  <li class="nav-item">
-                    <button type="button" class="btn buttons mx-3 font-weight-bolder text-light " id="Messages_button" >Messages <i class=" mx-2 fa fa-envelope"></i></button>
                   </li>
                  
                 
@@ -410,7 +460,12 @@ if(isset($_POST['logout']))
 
                  <!-- #################################### right side section #########################################################################################################-->
 
-                <div class="col-lg-2 rounded shadow-lg p-4 mb-4  mx-3 bg-white">
+                <div class="col-lg-2 h-75  rounded shadow-lg  mb-4  mx-3 bg-white" id="display_top_avc ">
+                  <h3 class="font-weight-bolder my-4 w-100"> Well known company Account</h3>
+                  <hr class ="text-secondary ">
+                  <div class="container-fluid p-0" id="display_top_avc">
+
+                  </div>
                  
                 </div>
                 <!--end of left side section-->
@@ -439,12 +494,8 @@ if(isset($_POST['logout']))
 
                   <div class="row p-3">
                    <p> <label class="font-weight-bolder">Asset Type:</label></p>
-                   <select name="cars" class="custom-select w-100">
-                     <option selected style=" display:none;"> select Asset</option>
-                     <option value="volvo">House</option>
-                     <option value="fiat">Land</option>
-                     <option value="audi">car</option>
-                     <option value="audi">other</option>
+                   <select name="asset_type" class="custom-select w-100" id="selection_for_asset">
+                     
                    </select>
                    
                   </div>
@@ -680,6 +731,7 @@ if(isset($_POST['logout']))
   </form>
       <form name="serial" method ="POST" action="" enctype="multipart/form-data">
       <input type="tel" class="mx-auto form-control w-100 "  hidden value="<?php echo $client_ID?>"  name="ID" >
+      <input type="text" class="mx-auto form-control w-100 "  hidden value="Client"  name="Account_type" >
     </form>
         
 
@@ -734,6 +786,97 @@ if(isset($_POST['logout']))
 
 
 
+
+
+
+
+
+
+
+<!--##################################### Chat model ##################################################################################################### -->
+
+
+<div class="container  ">
+  <div class="modal fade rounded" id="chat_view">
+      <div class="modal-dialog  modal-xl modal-dialog-centered">
+        <div class="modal-content">
+       
+          <div class="modal-header bg-light p-0" id="chat_header">
+         
+            </div>
+          <div class="modal-body rounded p-2  ">
+            <div class="container shadow-lg rounded p-0" id="chat-modal">
+              <div class="row">
+             
+               <div class="col-lg-12 p-2  " style=" word-break: break-all;">
+                <div class="chat-box" id="chat-log-display">
+                  <div class="outgoing" >
+                      <div class="details w-100 ">
+                        <p class=" text-light bg-primary p-4" >
+                          hey there man hey there manhey there manhey there man there manhey there 
+                          man hey there manhey there manhey there man there man hey there man hey there manhey there manhey there man there 
+                        </p>
+                      </div>
+      
+                  </div>
+      
+                  <div class="outgoing" >
+                    <div class="details ">
+                      <p class=" text-light bg-primary p-4" >
+                        hey there man hey there manhey there manhey there man there manhey there 
+                       
+                      </p>
+                    </div>
+      
+                </div>
+                  <div class="incoming">
+                    <div class="details " >
+                      <p class="text-light bg-info p-4 "  >
+                        hey there man hey there manhey there manhey there man there manhey there 
+                        man hey there manhey there manhey there man there man hey there man hey there manhey there manhey there man there 
+                      </p>
+                    </div>
+      
+                </div>
+      
+                </div>
+      
+               </div>
+              </div>
+             
+      
+      
+            </div>
+          </div>
+          <div class="modal-footer" id="send_button">
+            <div class="col-sm-12  w-100">
+                  <form class="form-inline" action="/action_page.php">
+                    <div class="input-group w-100  ">
+                      <textarea class="form-control" rows="4" cols ="4 " id="usermsg" name="usermsg" required></textarea>
+                      
+                      <div class="input-group-append rounded">
+                        <input name="submitmsg" class=" btn btn-primary"type="submit" id="submitmsg" value="Send">
+                      </div>
+  
+                    </div>
+                      </form>
+
+
+
+                </div>
+         
+           </div>
+        </div>
+
+
+      </div>
+
+
+
+  </div>
+</div>
+
+<!--##################################### Chat end of model ##################################################################################################### -->
 
 
 

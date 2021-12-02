@@ -4,6 +4,7 @@ $db="avs";
 $username="root";
 $password="";
 $GLOBALS['date']=date("Y-m-d");
+$GLOBALS['date_time']=date("g:i A");
 $GLOBALS['conn']= new mysqli ($server,$username,$password,$db);
 if($conn->connect_error)
 {

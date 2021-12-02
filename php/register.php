@@ -78,7 +78,7 @@ function client()
     $f_name=$_POST['firstname'];
     $l_name=$_POST['lastname'];
     $user_name=$_POST['username'];
-    $pwd=$_POST['password'];
+    $pwd=md5($_POST['password']);
     $email=$_POST['email'];
     $phone=$_POST['phonenumber'];
     $city=$_POST['city'];
@@ -228,7 +228,7 @@ function broker()
     $f_name=$_POST['firstname'];
     $l_name=$_POST['lastname'];
     $user_name=$_POST['username'];
-    $pwd=$_POST['password'];
+    $pwd=md5($_POST['password']);
     $email=$_POST['email'];
     $phone=$_POST['phonenumber'];
     $city=$_POST['city'];
@@ -246,8 +246,11 @@ function broker()
             VALUES ('$user_name','$pwd','Broker','$Broker_ID')";
             if($conn->query($sql)===true)
             {
-              
-              $_SESSION['Broker_ID']=$Broker_ID;
+              $sql="INSERT INTO score (Score_point,Broker_ID) VALUES (0,'$Broker_ID')";
+              if($conn->query($sql)===true)
+              {
+
+                $_SESSION['Broker_ID']=$Broker_ID;
 
               echo'<div id= "toadd" class="" >
               <div class=" w3-animate-zoom">
@@ -260,6 +263,13 @@ function broker()
                 </div>
               </div>
             </div>';
+              }
+              else
+              {
+                
+
+              }
+              
             }
             else
             {
@@ -386,7 +396,7 @@ function company()
 
     $name=$_POST['name'];
     $user_name=$_POST['username'];
-    $pwd=$_POST['password'];
+    $pwd=md5($_POST['password']);
     $email=$_POST['email'];
     $phone=$_POST['phonenumber'];
     $city=$_POST['city'];
@@ -583,7 +593,7 @@ function Admin()
     $f_name=$_POST['firstname'];
     $l_name=$_POST['lastname'];
     $user_name=$_POST['username'];
-    $pwd=$_POST['password'];
+    $pwd=md5($_POST['password']);
     $email=$_POST['email'];
     $phone=$_POST['phonenumber'];
     $city=$_POST['city'];

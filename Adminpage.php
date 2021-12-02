@@ -457,7 +457,9 @@ include "connection.php";
                             <button class="buttons btn  p-2 font-weight-bold" id="account_button">Account's  <span class=" mx-2 fas fa-users-cog "> </span>  </button>
                           </li>
                           <li class="nav-item  my-1 p-2 ">
-                            <button class="buttons btn  p-2 font-weight-bold" id="license_button">license Request <span class=" mx-2 fas fa-thumbtack"> </span>  </button>
+                            <button class="buttons btn  p-2 font-weight-bold" id="license_button">license Request <span class=" mx-2 fas fa-thumbtack"> </span>
+                               <span class="badge badge-pill badge-primary"><?php echo $total_reqest_pending;?></span> 
+                              </button>
                           </li>
                         </ul>
                       </nav>
@@ -1130,7 +1132,20 @@ include "connection.php";
 
              <!--################################# end of manage Accounts request   #####################################################################-->
 
-             
+             <!-- for viewing individual license request -->
+             <div class="container-fluid text-dark " id="license_view_content" style="display:none;">
+              
+                  
+                  
+                  
+  
+              </div>
+        
+  
+            </div>
+
+
+             <!--end of view-->
               
                 </div>
 

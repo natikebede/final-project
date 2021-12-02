@@ -79,7 +79,7 @@ function update_Admin ()
     $Admin_ID=$_SESSION['Admin_ID'];
     $f_name=$_POST['firstname'];
     $l_name=$_POST['lastname'];
-    $pwd=$_POST['password'];
+    $pwd=md5($_POST['password']);
     $email=$_POST['email'];
     $city=$_POST['city'];
     $wereda=$_POST['wereda'];
@@ -103,7 +103,7 @@ function update_Admin ()
                           <div class="alert alert-success alert-dismissible fade show">
                               <strong>!</strong> account information updated !!
                               <P>
-                              <button type="button" onclick="go_to_home_admin()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+                              <button type="button" onclick="go_to_home_admin ()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
                           </div>
                       </div>
                     </div>
@@ -161,7 +161,7 @@ function update_Admin ()
                           <div class="alert alert-success alert-dismissible fade show">
                               <strong>!</strong> account information updated !!
                               <P>
-                              <button type="button" onclick="go_to_home_client()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
+                              <button type="button" onclick="go_to_home_admin ()"class="btn btn-primary align-self-center my-3" data-dismiss="alert">OK</button></P>
                           </div>
                       </div>
                     </div>
@@ -326,7 +326,7 @@ else
   {
     history.back();
   }
-  function go_to_home_admin ()
+  function go_to_home_admin()
   {
     window.location.href="../Adminpage.php";
   }

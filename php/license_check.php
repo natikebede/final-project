@@ -55,7 +55,10 @@ if($result->num_rows ==1 )
 }
 else
 {
-    echo'error is found on sql '.$conn->error.'  ';
+   echo' <div class="alert p-5 alert-light alert-dismissible fade show">
+            <strong class="text-danger font-weight-bold"> Sorry </strong> no license  request uploaded<br>
+         
+          </div>';
 
 }
  

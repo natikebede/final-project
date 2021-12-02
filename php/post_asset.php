@@ -186,9 +186,10 @@ if(isset($_FILES["asset_pic"]))
 function upload_to_database()
 { $client_ID=$_SESSION['Client_ID'];
   $conn=$GLOBALS['conn'];
+  $asset_id=$_POST["asset_type"];
   $discription=$_POST["discription"];
   $date=date("Y-m-d h:i:s");
-  $sql="INSERT INTO post( Post_discription, Upload_date,  Client_ID )VALUES ('$discription','$date','$client_ID')";
+  $sql="INSERT INTO post( Post_discription, Upload_date,Asset_ID, Client_ID )VALUES ('$discription','$date','$asset_id','$client_ID')";
   if($conn->query($sql)===true)
   {
     $last_id= $conn->insert_id;
